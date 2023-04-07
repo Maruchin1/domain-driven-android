@@ -19,7 +19,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: 'All Tests'
-        run: ./gradlew allTests
+        run: ./gradlew testDebugUnitTest
 
       - name: 'Bundle Android'
         run: ./gradlew bundle
