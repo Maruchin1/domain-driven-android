@@ -1,43 +1,44 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
+import java.net.URL
 import java.util.Currency
 
 data class Coupon(
     val id: String,
-    val title: String,
-    val subtitle: String,
-    val value: Money,
+    val name: String,
+    val price: Money,
+    val image: URL,
 )
 
-val sampleForHomeCoupons = listOf(
+val sampleCoupons = listOf(
     Coupon(
         id = "1",
-        title = "Coupon for Allegro",
-        subtitle = "Free delivery with Allegro Smart",
-        value = Money(value = 50.0, currency = Currency.getInstance("PLN"))
+        name = "Cheesburger with fries",
+        price = Money(value = 17.99, currency = Currency.getInstance("USD")),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/cheesburger_with_fries_coupon.jpeg"),
     ),
     Coupon(
         id = "2",
-        title = "Coupon for H&M",
-        subtitle = "Fashion and quality clothes at a good price",
-        value = Money(value = 100.0, currency = Currency.getInstance("PLN"))
+        name = "Chicekburger with fries",
+        price = Money(value = 15.99, currency = Currency.getInstance("USD")),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/chickenburger_with_fries_coupon.jpeg"),
     ),
     Coupon(
         id = "3",
-        title = "Coupon for Ikea",
-        subtitle = "Furniture and interior design for your home",
-        value = Money(value = 100.0, currency = Currency.getInstance("PLN"))
+        name = "Chicken nuggets with fries",
+        price = Money(value = 20.99, currency = Currency.getInstance("USD")),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/chicken_nuggets_with_fries_coupon.jpeg"),
     ),
     Coupon(
         id = "4",
-        title = "Designer brands at TK Maxx",
-        subtitle = "Hunt for stylish pearls and unique products",
-        value = Money(value = 100.0, currency = Currency.getInstance("PLN"))
+        name = "2 x Milkshake",
+        price = Money(value = 8.99, currency = Currency.getInstance("USD")),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_milkshakes_coupon.jpeg"),
     ),
     Coupon(
         id = "5",
-        title = "Coupon for Amazon.pl",
-        subtitle = "Thousands of products in one place",
-        value = Money(value = 94.0, currency = Currency.getInstance("PLN"))
-    )
+        name = "2 x Soda drink",
+        price = Money(value = 6.99, currency = Currency.getInstance("USD")),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_soda_drinks_coupon.jpeg"),
+    ),
 )

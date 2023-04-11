@@ -12,6 +12,6 @@ fun NavGraphBuilder.homeScreen() {
     composable(HOME_ROUTE) {
         val viewModel = hiltViewModel<HomeViewModel>()
         val state by viewModel.uiState.collectAsState()
-        HomeScreen(state = state, onSelectCategory = viewModel::selectCategory)
+        HomeScreen(state = state)
     }
 }
