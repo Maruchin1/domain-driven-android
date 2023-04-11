@@ -24,18 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.maruchin.domaindrivenandroid.data.coupon.Coupon
-import com.maruchin.domaindrivenandroid.data.coupon.sampleCoupons
-import com.maruchin.domaindrivenandroid.ui.theme.DomainDrivenAndroidTheme
+import com.maruchin.domaindrivenandroid.data.ID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(state: HomeUiState) {
+fun HomeScreen(state: HomeUiState, onOpenCoupon: (ID) -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         topBar = {
@@ -53,7 +48,7 @@ fun HomeScreen(state: HomeUiState) {
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
         ) {
             items(state.coupons) { coupon ->
-                CouponView(coupon = coupon)
+                CouponView(state = coupon, onClick = { onOpenCoupon(coupon.id) })
             }
         }
     }
@@ -61,20 +56,20 @@ fun HomeScreen(state: HomeUiState) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CouponView(coupon: Coupon) {
+private fun CouponView(state: CouponUiState, onClick: () -> Unit) {
     val density = LocalDensity.current.density
     var couponNamePadding by remember { mutableStateOf(0.dp) }
-    OutlinedCard(onClick = { /*TODO*/ }, modifier = Modifier.padding(6.dp)) {
+    OutlinedCard(onClick = onClick, modifier = Modifier.padding(6.dp)) {
         Column {
             AsyncImage(
-                model = coupon.image.toString(),
+                model = state.imageUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f / 1f),
             )
             Text(
-                text = coupon.name,
+                text = state.couponName,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 2,
                 modifier = Modifier
@@ -87,7 +82,7 @@ private fun CouponView(coupon: Coupon) {
                 }
             )
             Text(
-                text = coupon.price.toString(),
+                text = state.price,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.SemiBold,
@@ -95,19 +90,4 @@ private fun CouponView(coupon: Coupon) {
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun HomeScreenPreview(@PreviewParameter(HomeUiStateProvider::class) state: HomeUiState) {
-    DomainDrivenAndroidTheme {
-        HomeScreen(state = state)
-    }
-}
-
-class HomeUiStateProvider : PreviewParameterProvider<HomeUiState> {
-    override val values = sequenceOf(
-        HomeUiState(),
-        HomeUiState(coupons = sampleCoupons, loading = false)
-    )
 }
