@@ -1,29 +1,34 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
 import com.maruchin.domaindrivenandroid.data.units.ID
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CouponsRepository @Inject constructor() : Mutex by Mutex() {
-    private val _coupons: MutableMap<ID, Coupon> =
-        sampleCoupons.associateBy { it.id }.toMutableMap()
+class CouponsRepository @Inject constructor(
+    private val couponsApi: CouponsApi,
+    private val scope: CoroutineScope,
+) : Mutex by Mutex() {
+    private var coupons: Map<ID, Coupon> = emptyMap()
 
-    suspend fun getAllCoupons(): List<Coupon> = withLock {
-        delay(2_000)
-        _coupons.values.toList()
+    suspend fun getAllCoupons(): List<Coupon> {
+        loadIfCacheEmpty()
+        return coupons.values.toList()
     }
 
-    suspend fun getCoupon(id: ID): Coupon? = withLock {
-        delay(1_000)
-        _coupons[id]
+    suspend fun getCoupon(id: ID): Coupon? {
+        loadIfCacheEmpty()
+        return coupons[id]
     }
 
-    suspend fun saveCoupon(coupon: Coupon) = withLock {
-        delay(1_000)
-        _coupons[coupon.id] = coupon
+    private suspend fun loadIfCacheEmpty() {
+        if (coupons.isEmpty()) {
+            scope.async {
+                coupons = couponsApi.fetchAllCoupons().toModel().associateBy { it.id }
+            }.await()
+        }
     }
 }

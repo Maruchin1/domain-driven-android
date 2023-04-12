@@ -56,7 +56,6 @@ fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onColle
             Spacer(modifier = Modifier.weight(1f))
             AnimatedContent(
                 targetState = state.activation,
-                label = "",
                 modifier = Modifier.fillMaxWidth()
             ) { activationCode ->
                 when (activationCode) {

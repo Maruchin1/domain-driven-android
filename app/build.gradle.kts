@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.coil)
     implementation(libs.accompanist.placeholder)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
     kapt(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
