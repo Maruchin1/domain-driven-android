@@ -1,6 +1,7 @@
 package com.maruchin.domaindrivenandroid.ui.couponPreview
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -35,10 +36,9 @@ import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.maruchin.domaindrivenandroid.data.coupon.sampleCoupons
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
 fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onCollect: () -> Unit) {
     Scaffold(
@@ -195,29 +195,5 @@ private fun DefaultPreview(@PreviewParameter(UiStateProvider::class) state: Coup
 private class UiStateProvider : PreviewParameterProvider<CouponPreviewUiState> {
     override val values = sequenceOf(
         CouponPreviewUiState(),
-        CouponPreviewUiState(
-            isLoading = false,
-            couponId = sampleCoupons[0].id,
-            imageUrl = sampleCoupons[0].image.toString(),
-            couponName = sampleCoupons[0].name,
-            price = sampleCoupons[0].price.toString(),
-            activation = ActivationUiState.Collect,
-        ),
-        CouponPreviewUiState(
-            isLoading = false,
-            couponId = sampleCoupons[0].id,
-            imageUrl = sampleCoupons[0].image.toString(),
-            couponName = sampleCoupons[0].name,
-            price = sampleCoupons[0].price.toString(),
-            activation = ActivationUiState.Active(),
-        ),
-        CouponPreviewUiState(
-            isLoading = false,
-            couponId = sampleCoupons[0].id,
-            imageUrl = sampleCoupons[0].image.toString(),
-            couponName = sampleCoupons[0].name,
-            price = sampleCoupons[0].price.toString(),
-            activation = ActivationUiState.Active(code = "123456", isProcessing = false),
-        ),
     )
 }

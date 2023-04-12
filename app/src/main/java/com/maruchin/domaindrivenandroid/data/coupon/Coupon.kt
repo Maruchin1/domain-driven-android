@@ -10,36 +10,3 @@ data class Coupon(
     val price: Points,
     val image: URL,
 )
-
-val sampleCoupons = listOf(
-    Coupon(
-        id = ID("1"),
-        name = "Cheesburger with fries",
-        price = Points(200),
-        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/cheesburger_with_fries_coupon.jpeg"),
-    ),
-    Coupon(
-        id = ID("2"),
-        name = "Chicekburger with fries",
-        price = Points(150),
-        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/chickenburger_with_fries_coupon.jpeg"),
-    ),
-    Coupon(
-        id = ID("3"),
-        name = "Chicken nuggets with fries",
-        price = Points(250),
-        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/chicken_nuggets_with_fries_coupon.jpeg"),
-    ),
-    Coupon(
-        id = ID("4"),
-        name = "2 x Milkshake",
-        price = Points(100),
-        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_milkshakes_coupon.jpeg"),
-    ),
-    Coupon(
-        id = ID("5"),
-        name = "2 x Soda drink",
-        price = Points(50),
-        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_soda_drinks_coupon.jpeg"),
-    ),
-)
