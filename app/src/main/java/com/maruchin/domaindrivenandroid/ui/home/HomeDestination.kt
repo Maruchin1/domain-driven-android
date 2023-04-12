@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.maruchin.domaindrivenandroid.data.ID
+import com.maruchin.domaindrivenandroid.data.units.ID
 
 const val HOME_ROUTE = "home"
 

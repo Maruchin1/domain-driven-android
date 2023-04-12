@@ -1,6 +1,5 @@
 package com.maruchin.domaindrivenandroid.ui.home
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,8 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -22,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -31,8 +34,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.material.placeholder
-import com.maruchin.domaindrivenandroid.data.ID
-import com.maruchin.domaindrivenandroid.data.coupon.sampleCoupons
+import com.maruchin.domaindrivenandroid.data.units.ID
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,33 +69,45 @@ private fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun CouponView(state: CouponUiState, onClick: () -> Unit) {
+private fun CouponView(state: CouponItemUiState, onClick: () -> Unit) {
     val density = LocalDensity.current.density
     var couponNamePadding by remember { mutableStateOf(0.dp) }
-    OutlinedCard(onClick = onClick, modifier = Modifier.padding(6.dp)) {
-        Column {
-            AsyncImage(
-                model = state.imageUrl.takeIf { it.isNotBlank() },
+    OutlinedCard(
+        onClick = onClick,
+        modifier = Modifier
+            .padding(6.dp)
+            .alpha(if (state.canUnlock) 1f else 0.6f),
+    ) {
+        AsyncImage(
+            model = state.imageUrl.takeIf { it.isNotBlank() },
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f / 1f)
+                .placeholder(state.isLoading),
+        )
+        Text(
+            text = state.couponName,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 2,
+            onTextLayout = {
+                val lineCount = it.lineCount
+                val height = (it.size.height / density).dp
+                couponNamePadding = if (lineCount > 1) 0.dp else height
+            },
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .padding(top = 12.dp, bottom = couponNamePadding)
+                .placeholder(state.isLoading)
+        )
+        if (state.isUnlocked) {
+            Icon(
+                imageVector = Icons.Outlined.CheckCircle,
                 contentDescription = null,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f / 1f)
-                    .placeholder(state.isLoading),
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(12.dp),
             )
-            Text(
-                text = state.couponName,
-                style = MaterialTheme.typography.titleMedium,
-                maxLines = 2,
-                onTextLayout = {
-                    val lineCount = it.lineCount
-                    val height = (it.size.height / density).dp
-                    couponNamePadding = if (lineCount > 1) 0.dp else height
-                },
-                modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .padding(top = 12.dp, bottom = couponNamePadding)
-                    .placeholder(state.isLoading)
-            )
+        } else {
             Text(
                 text = state.price,
                 style = MaterialTheme.typography.bodyLarge,
@@ -118,6 +132,5 @@ private fun DefaultPreview(@PreviewParameter(UiStateProvider::class) state: Home
 private class UiStateProvider : PreviewParameterProvider<HomeUiState> {
     override val values = sequenceOf(
         HomeUiState(),
-        HomeUiState(coupons = sampleCoupons.map(::CouponUiState))
     )
 }

@@ -1,6 +1,6 @@
 package com.maruchin.domaindrivenandroid.data.activationCode
 
-import com.maruchin.domaindrivenandroid.data.ID
+import com.maruchin.domaindrivenandroid.data.units.ID
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
