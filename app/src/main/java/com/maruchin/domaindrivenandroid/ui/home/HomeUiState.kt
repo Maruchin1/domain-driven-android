@@ -22,6 +22,5 @@ data class CouponItemUiState(
     val couponName: String = "00000 00000 00000",
     val price: String = "00000",
     val isLoading: Boolean = true,
-    val isUnlocked: Boolean = false,
-    val canUnlock: Boolean = true,
+    val canCollect: Boolean = false,
 )

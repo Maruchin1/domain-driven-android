@@ -10,17 +10,19 @@ data class CouponPreviewUiState(
     val imageUrl: String = "",
     val couponName: String = "00000 00000 00000",
     val price: String = "00000",
-    val activationCode: ActivationCodeUiState = ActivationCodeUiState.Collect,
+    val activation: ActivationUiState = ActivationUiState.Collect,
     val showError: Boolean = false,
 )
 
-sealed class ActivationCodeUiState {
+sealed class ActivationUiState {
 
-    object Collect : ActivationCodeUiState()
+    object CantCollect : ActivationUiState()
+
+    object Collect : ActivationUiState()
 
     @Immutable
     data class Active(
         val code: String = "00000",
         val isProcessing: Boolean = true,
-    ) : ActivationCodeUiState()
+    ) : ActivationUiState()
 }

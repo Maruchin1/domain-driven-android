@@ -3,8 +3,8 @@ package com.maruchin.domaindrivenandroid.ui.couponPreview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maruchin.domaindrivenandroid.data.units.ID
-import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCodesRepository
-import com.maruchin.domaindrivenandroid.domain.coupon.GetCouponToUnlockUseCase
+import com.maruchin.domaindrivenandroid.domain.coupon.ActivateCouponUseCase
+import com.maruchin.domaindrivenandroid.domain.coupon.GetCollectableCouponUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CouponPreviewViewModel @Inject constructor(
-    private val getCouponToUnlockUseCase: GetCouponToUnlockUseCase,
-    private val activationCodesRepository: ActivationCodesRepository,
+    private val getCollectableCouponUseCase: GetCollectableCouponUseCase,
+    private val activateCouponUseCase: ActivateCouponUseCase,
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ -> handleError() }
@@ -24,14 +24,14 @@ class CouponPreviewViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun selectCoupon(couponId: ID) = viewModelScope.launch(exceptionHandler) {
-        val couponToUnlock = getCouponToUnlockUseCase(couponId).let(::checkNotNull)
-        _uiState.update { mapCouponSelected(it, couponToUnlock) }
+        val collectableCoupon = getCollectableCouponUseCase(couponId).let(::checkNotNull)
+        _uiState.update { mapCouponSelected(it, collectableCoupon) }
     }
 
     fun collectCoupon() = viewModelScope.launch(exceptionHandler) {
         val couponId = _uiState.value.couponId
         _uiState.update { mapActivationStarted(it) }
-        val activationCode = activationCodesRepository.getActivationCodeForCoupon(couponId)
+        val activationCode = activateCouponUseCase(couponId)
         _uiState.update { mapActivationCompleted(it, activationCode) }
     }
 

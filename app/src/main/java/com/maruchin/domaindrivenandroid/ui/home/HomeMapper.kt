@@ -1,19 +1,18 @@
 package com.maruchin.domaindrivenandroid.ui.home
 
-import com.maruchin.domaindrivenandroid.domain.coupon.CouponToUnlock
+import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
 import com.maruchin.domaindrivenandroid.ui.format
 
-fun mapCouponsLoaded(state: HomeUiState, couponsToUnlock: List<CouponToUnlock>): HomeUiState {
+fun mapCouponsLoaded(state: HomeUiState, collectableCoupons: List<CollectableCoupon>): HomeUiState {
     return state.copy(
-        coupons = couponsToUnlock.map { couponToUnlock ->
+        coupons = collectableCoupons.map { couponToUnlock ->
             CouponItemUiState(
                 id = couponToUnlock.coupon.id,
                 imageUrl = couponToUnlock.coupon.image.toString(),
                 couponName = couponToUnlock.coupon.name,
                 price = couponToUnlock.coupon.price.format(),
                 isLoading = false,
-                isUnlocked = couponToUnlock.coupon.unlocked,
-                canUnlock = couponToUnlock.canUnlock,
+                canCollect = couponToUnlock.canCollect,
             )
         }
     )

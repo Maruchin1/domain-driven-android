@@ -1,24 +1,29 @@
 package com.maruchin.domaindrivenandroid.ui.couponPreview
 
 import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
-import com.maruchin.domaindrivenandroid.domain.coupon.CouponToUnlock
+import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
 import com.maruchin.domaindrivenandroid.ui.format
 
 fun mapCouponSelected(
     state: CouponPreviewUiState,
-    couponToUnlock: CouponToUnlock
+    collectableCoupon: CollectableCoupon
 ): CouponPreviewUiState {
     return state.copy(
         isLoading = false,
-        couponId = couponToUnlock.coupon.id,
-        imageUrl = couponToUnlock.coupon.image.toString(),
-        couponName = couponToUnlock.coupon.name,
-        price = couponToUnlock.coupon.price.format(),
+        couponId = collectableCoupon.coupon.id,
+        imageUrl = collectableCoupon.coupon.image.toString(),
+        couponName = collectableCoupon.coupon.name,
+        price = collectableCoupon.coupon.price.format(),
+        activation = if (collectableCoupon.canCollect) {
+            ActivationUiState.Collect
+        } else {
+            ActivationUiState.CantCollect
+        }
     )
 }
 
 fun mapActivationStarted(state: CouponPreviewUiState): CouponPreviewUiState {
-    return state.copy(activationCode = ActivationCodeUiState.Active(isProcessing = true))
+    return state.copy(activation = ActivationUiState.Active(isProcessing = true))
 }
 
 fun mapActivationCompleted(
@@ -26,7 +31,7 @@ fun mapActivationCompleted(
     activationCode: ActivationCode
 ): CouponPreviewUiState {
     return state.copy(
-        activationCode = ActivationCodeUiState.Active(
+        activation = ActivationUiState.Active(
             code = activationCode.value,
             isProcessing = false,
         )

@@ -4,8 +4,12 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material3.Button
@@ -40,23 +44,32 @@ fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onColle
     Scaffold(
         topBar = { TopBar(onBack) }
     ) { paddingValues ->
-        Column(modifier = Modifier.padding(paddingValues)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState()),
+        ) {
             CouponImage(imageUrl = state.imageUrl, isLoading = state.isLoading)
             CouponNameView(couponName = state.couponName, isLoading = state.isLoading)
             PriceView(price = state.price, isLoading = state.isLoading)
             Spacer(modifier = Modifier.weight(1f))
             AnimatedContent(
-                targetState = state.activationCode,
+                targetState = state.activation,
                 label = "",
                 modifier = Modifier.fillMaxWidth()
             ) { activationCode ->
                 when (activationCode) {
-                    ActivationCodeUiState.Collect -> CollectButton(
+                    ActivationUiState.CantCollect -> CantCollectButton(
                         isLoading = state.isLoading,
-                        onCollect = onCollect
                     )
 
-                    is ActivationCodeUiState.Active -> ActivationCodeView(activationCode)
+                    ActivationUiState.Collect -> CollectButton(
+                        isLoading = state.isLoading,
+                        onCollect = onCollect,
+                    )
+
+                    is ActivationUiState.Active -> ActivationCodeView(activationCode)
                 }
             }
         }
@@ -119,6 +132,28 @@ private fun PriceView(price: String, isLoading: Boolean) {
 }
 
 @Composable
+private fun CantCollectButton(isLoading: Boolean) {
+    Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
+        Text(
+            text = "Not enough points",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Button(
+            onClick = {},
+            enabled = false,
+            modifier = Modifier
+                .fillMaxWidth()
+                .placeholder(isLoading),
+        ) {
+            Text(text = "Offer locked".uppercase())
+        }
+    }
+}
+
+@Composable
 private fun CollectButton(isLoading: Boolean, onCollect: () -> Unit) {
     Button(
         onClick = onCollect,
@@ -132,7 +167,7 @@ private fun CollectButton(isLoading: Boolean, onCollect: () -> Unit) {
 }
 
 @Composable
-private fun ActivationCodeView(activationCode: ActivationCodeUiState.Active) {
+private fun ActivationCodeView(activationCode: ActivationUiState.Active) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -145,8 +180,7 @@ private fun ActivationCodeView(activationCode: ActivationCodeUiState.Active) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp)
-            ,
+                .padding(20.dp),
         )
     }
 }
@@ -168,7 +202,7 @@ private class UiStateProvider : PreviewParameterProvider<CouponPreviewUiState> {
             imageUrl = sampleCoupons[0].image.toString(),
             couponName = sampleCoupons[0].name,
             price = sampleCoupons[0].price.toString(),
-            activationCode = ActivationCodeUiState.Collect,
+            activation = ActivationUiState.Collect,
         ),
         CouponPreviewUiState(
             isLoading = false,
@@ -176,7 +210,7 @@ private class UiStateProvider : PreviewParameterProvider<CouponPreviewUiState> {
             imageUrl = sampleCoupons[0].image.toString(),
             couponName = sampleCoupons[0].name,
             price = sampleCoupons[0].price.toString(),
-            activationCode = ActivationCodeUiState.Active(),
+            activation = ActivationUiState.Active(),
         ),
         CouponPreviewUiState(
             isLoading = false,
@@ -184,7 +218,7 @@ private class UiStateProvider : PreviewParameterProvider<CouponPreviewUiState> {
             imageUrl = sampleCoupons[0].image.toString(),
             couponName = sampleCoupons[0].name,
             price = sampleCoupons[0].price.toString(),
-            activationCode = ActivationCodeUiState.Active(code = "123456", isProcessing = false),
+            activation = ActivationUiState.Active(code = "123456", isProcessing = false),
         ),
     )
 }

@@ -2,7 +2,7 @@ package com.maruchin.domaindrivenandroid.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maruchin.domaindrivenandroid.domain.coupon.GetAllCouponsToUnlockUseCase
+import com.maruchin.domaindrivenandroid.domain.coupon.GetAllCollectableCouponsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getAllCouponsToUnlockUseCase: GetAllCouponsToUnlockUseCase,
+    private val getAllCollectableCouponsUseCase: GetAllCollectableCouponsUseCase,
 ) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler { _, _ -> handleError() }
@@ -29,8 +29,8 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadCoupons() = viewModelScope.launch(exceptionHandler) {
-        val couponsToUnlock = getAllCouponsToUnlockUseCase()
-        _uiState.update { mapCouponsLoaded(it, couponsToUnlock) }
+        val collectableCoupons = getAllCollectableCouponsUseCase()
+        _uiState.update { mapCouponsLoaded(it, collectableCoupons) }
     }
 
     private fun handleError() {

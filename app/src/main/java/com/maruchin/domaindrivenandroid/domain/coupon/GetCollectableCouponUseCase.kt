@@ -5,15 +5,15 @@ import com.maruchin.domaindrivenandroid.data.coupon.CouponsRepository
 import com.maruchin.domaindrivenandroid.data.units.ID
 import javax.inject.Inject
 
-class GetCouponToUnlockUseCase @Inject constructor(
+class GetCollectableCouponUseCase @Inject constructor(
     private val accountRepository: AccountRepository,
     private val couponsRepository: CouponsRepository,
 ) {
 
-    suspend operator fun invoke(couponId: ID): CouponToUnlock? {
+    suspend operator fun invoke(couponId: ID): CollectableCoupon? {
         val account = accountRepository.getLoggedInAccount().let(::checkNotNull)
         return couponsRepository.getCoupon(couponId)?.let { coupon ->
-            CouponToUnlock(coupon = coupon, canUnlock = account.canPayForCoupon(coupon))
+            CollectableCoupon(coupon = coupon, canCollect = account.canPayForCoupon(coupon))
         }
     }
 }

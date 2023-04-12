@@ -7,11 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -76,7 +73,7 @@ private fun CouponView(state: CouponItemUiState, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .padding(6.dp)
-            .alpha(if (state.canUnlock) 1f else 0.6f),
+            .alpha(if (state.canCollect) 1f else 0.6f),
     ) {
         AsyncImage(
             model = state.imageUrl.takeIf { it.isNotBlank() },
@@ -100,24 +97,15 @@ private fun CouponView(state: CouponItemUiState, onClick: () -> Unit) {
                 .padding(top = 12.dp, bottom = couponNamePadding)
                 .placeholder(state.isLoading)
         )
-        if (state.isUnlocked) {
-            Icon(
-                imageVector = Icons.Outlined.CheckCircle,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(12.dp),
-            )
-        } else {
-            Text(
-                text = state.price,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .padding(12.dp)
-                    .placeholder(state.isLoading),
-            )
-        }
+        Text(
+            text = state.price,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.primary,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .padding(12.dp)
+                .placeholder(state.isLoading),
+        )
     }
 }
 
