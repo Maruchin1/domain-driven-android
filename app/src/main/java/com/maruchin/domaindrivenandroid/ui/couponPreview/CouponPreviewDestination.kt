@@ -20,7 +20,7 @@ fun NavGraphBuilder.couponPreviewScreen(onBack: () -> Unit) {
         LaunchedEffect(Unit) {
             viewModel.selectCoupon(couponId)
         }
-        CouponPreviewScreen(state = state, onBack = onBack, onCollect = {})
+        CouponPreviewScreen(state = state, onBack = onBack, onCollect = viewModel::collectCoupon)
     }
 }
 

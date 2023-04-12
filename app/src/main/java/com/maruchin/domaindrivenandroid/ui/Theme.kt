@@ -1,4 +1,4 @@
-package com.maruchin.domaindrivenandroid.ui.theme
+package com.maruchin.domaindrivenandroid.ui
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

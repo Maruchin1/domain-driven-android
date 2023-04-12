@@ -23,12 +23,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun loadCoupons() = viewModelScope.launch {
-        _uiState.update {
-            it.copy(loading = true)
-        }
         val coupons = couponsRepository.getAllCoupons()
         _uiState.update {
-            it.copy(loading = false, coupons = coupons.map(::CouponUiState))
+            it.copy(coupons = coupons.map(::CouponUiState))
         }
     }
 }

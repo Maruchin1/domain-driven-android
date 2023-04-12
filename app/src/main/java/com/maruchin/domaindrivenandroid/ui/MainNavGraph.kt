@@ -1,4 +1,4 @@
-package com.maruchin.domaindrivenandroid
+package com.maruchin.domaindrivenandroid.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost

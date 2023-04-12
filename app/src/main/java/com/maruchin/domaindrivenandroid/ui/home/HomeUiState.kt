@@ -6,16 +6,22 @@ import com.maruchin.domaindrivenandroid.data.coupon.Coupon
 
 @Immutable
 data class HomeUiState(
-    val coupons: List<CouponUiState> = emptyList(),
-    val loading: Boolean = true,
+    val coupons: List<CouponUiState> = listOf(
+        CouponUiState(),
+        CouponUiState(),
+        CouponUiState(),
+        CouponUiState(),
+        CouponUiState(),
+    ),
 )
 
 @Immutable
 data class CouponUiState(
-    val id: ID,
-    val imageUrl: String,
-    val couponName: String,
-    val price: String,
+    val id: ID = ID(""),
+    val imageUrl: String = "",
+    val couponName: String = "00000 00000 00000",
+    val price: String = "00000",
+    val isLoading: Boolean = true,
 ) {
 
     constructor(coupon: Coupon) : this(
@@ -23,5 +29,6 @@ data class CouponUiState(
         imageUrl = coupon.image.toString(),
         couponName = coupon.name,
         price = coupon.price.toString(),
+        isLoading = false,
     )
 }
