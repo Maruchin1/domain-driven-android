@@ -1,28 +1,23 @@
 package com.maruchin.domaindrivenandroid.ui.couponPreview
 
-import androidx.compose.runtime.Immutable
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
+import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
+import com.maruchin.domaindrivenandroid.ui.placeholderCollectableCoupon
 
-@Immutable
 data class CouponPreviewUiState(
+    val coupon: CollectableCoupon = placeholderCollectableCoupon(),
     val isLoading: Boolean = true,
-    val couponId: ID = ID(""),
-    val imageUrl: String = "",
-    val couponName: String = "00000 00000 00000",
-    val price: String = "00000",
-    val activation: ActivationUiState = ActivationUiState.Collect,
-    val showError: Boolean = false,
+    val couponStatus: CouponStatus = CouponStatus.NotCollected,
+    val failedToLoadCoupon: Boolean = false,
 )
 
-sealed class ActivationUiState {
+sealed class CouponStatus {
 
-    object CantCollect : ActivationUiState()
+    object NotCollected : CouponStatus()
 
-    object Collect : ActivationUiState()
+    object CollectingInProgress : CouponStatus()
 
-    @Immutable
-    data class Active(
-        val code: String = "00000",
-        val isProcessing: Boolean = true,
-    ) : ActivationUiState()
+    object FailedToCollect : CouponStatus()
+
+    data class Collected(val activationCode: ActivationCode) : CouponStatus()
 }

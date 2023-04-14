@@ -7,6 +7,6 @@ import java.net.URL
 data class Coupon(
     val id: ID,
     val name: String,
-    val price: Points,
+    val points: Points,
     val image: URL,
 )

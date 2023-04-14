@@ -1,6 +1,9 @@
 package com.maruchin.domaindrivenandroid.data
 
+import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCodesApi
+import com.maruchin.domaindrivenandroid.data.activationCode.FakeActivationCodesApi
 import com.maruchin.domaindrivenandroid.data.coupon.CouponsApi
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,11 +14,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+abstract class DataModule {
 
-    @Provides
-    @Singleton
-    fun couponsApi(retrofit: Retrofit): CouponsApi {
-        return retrofit.create()
+    @Binds
+    abstract fun activationCodesApi(impl: FakeActivationCodesApi): ActivationCodesApi
+
+
+    companion object {
+
+        @Provides
+        @Singleton
+        fun couponsApi(retrofit: Retrofit): CouponsApi {
+            return retrofit.create()
+        }
     }
 }

@@ -7,7 +7,7 @@ import java.net.URL
 fun CouponJson.toModel() = Coupon(
     id = ID(id),
     name = name,
-    price = Points(points),
+    points = Points(points),
     image = URL(image),
 )
 

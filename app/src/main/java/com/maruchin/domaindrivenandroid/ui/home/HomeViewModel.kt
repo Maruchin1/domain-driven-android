@@ -2,38 +2,32 @@ package com.maruchin.domaindrivenandroid.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.maruchin.domaindrivenandroid.data.account.AccountRepository
 import com.maruchin.domaindrivenandroid.domain.coupon.GetAllCollectableCouponsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllCollectableCouponsUseCase: GetAllCollectableCouponsUseCase,
+    private val accountRepository: AccountRepository,
 ) : ViewModel() {
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, _ -> handleError() }
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState = _uiState.asStateFlow()
+    private val allCoupons = getAllCollectableCouponsUseCase()
+    private val account = accountRepository.getLoggedInAccount().filterNotNull()
 
-    init {
-        loadCoupons()
-    }
-
-    fun consumeError() {
-        _uiState.update { it.copy(showError = false) }
-    }
-
-    private fun loadCoupons() = viewModelScope.launch(exceptionHandler) {
-        val collectableCoupons = getAllCollectableCouponsUseCase()
-        _uiState.update { mapCouponsLoaded(it, collectableCoupons) }
-    }
-
-    private fun handleError() {
-        _uiState.update { it.copy(showError = true) }
-    }
+    val uiState: StateFlow<HomeUiState> = combine(
+        allCoupons,
+        account
+    ) { allCoupons, account ->
+        HomeUiState(coupons = allCoupons, isLoading = false, myPoints = account.collectedPoints)
+    }.catch {
+        emit(HomeUiState(coupons = emptyList(), isLoading = false, failedToLoadCoupons = true))
+    }.stateIn(viewModelScope, SharingStarted.Lazily, HomeUiState())
 }

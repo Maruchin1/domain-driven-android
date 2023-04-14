@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -36,7 +35,9 @@ import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
+import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
+import com.maruchin.domaindrivenandroid.ui.format
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -50,25 +51,24 @@ fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onColle
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState()),
         ) {
-            CouponImage(imageUrl = state.imageUrl, isLoading = state.isLoading)
-            CouponNameView(couponName = state.couponName, isLoading = state.isLoading)
-            PriceView(price = state.price, isLoading = state.isLoading)
+            CouponImage(
+                imageUrl = state.coupon.coupon.image.toString(),
+                isLoading = state.isLoading
+            )
+            CouponNameView(couponName = state.coupon.coupon.name, isLoading = state.isLoading)
+            PointsView(price = state.coupon.coupon.points.format(), isLoading = state.isLoading)
             Spacer(modifier = Modifier.weight(1f))
-            AnimatedContent(
-                targetState = state.activation,
-                modifier = Modifier.fillMaxWidth()
-            ) { activationCode ->
-                when (activationCode) {
-                    ActivationUiState.CantCollect -> CantCollectButton(
+            AnimatedContent(targetState = state.couponStatus) { couponStatus ->
+                when (couponStatus) {
+                    CouponStatus.NotCollected -> CollectButton(
                         isLoading = state.isLoading,
-                    )
-
-                    ActivationUiState.Collect -> CollectButton(
-                        isLoading = state.isLoading,
+                        canCollect = state.coupon.canCollect,
                         onCollect = onCollect,
                     )
 
-                    is ActivationUiState.Active -> ActivationCodeView(activationCode)
+                    CouponStatus.CollectingInProgress -> ActivationCodeView(activationCode = null)
+                    CouponStatus.FailedToCollect -> TODO()
+                    is CouponStatus.Collected -> ActivationCodeView(couponStatus.activationCode)
                 }
             }
         }
@@ -118,7 +118,7 @@ private fun CouponNameView(couponName: String, isLoading: Boolean) {
 }
 
 @Composable
-private fun PriceView(price: String, isLoading: Boolean) {
+private fun PointsView(price: String, isLoading: Boolean) {
     Text(
         text = price,
         style = MaterialTheme.typography.headlineMedium,
@@ -131,50 +131,40 @@ private fun PriceView(price: String, isLoading: Boolean) {
 }
 
 @Composable
-private fun CantCollectButton(isLoading: Boolean) {
+private fun CollectButton(isLoading: Boolean, canCollect: Boolean, onCollect: () -> Unit) {
     Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)) {
-        Text(
-            text = "Not enough points",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(4.dp))
+        if (!canCollect) {
+            Text(
+                text = "Not enough points",
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 4.dp)
+            )
+        }
         Button(
-            onClick = {},
-            enabled = false,
+            onClick = onCollect,
+            enabled = !isLoading && canCollect,
             modifier = Modifier
                 .fillMaxWidth()
                 .placeholder(isLoading),
         ) {
-            Text(text = "Offer locked".uppercase())
+            Text(text = "Collect".uppercase())
         }
     }
 }
 
 @Composable
-private fun CollectButton(isLoading: Boolean, onCollect: () -> Unit) {
-    Button(
-        onClick = onCollect,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 12.dp)
-            .placeholder(isLoading),
-    ) {
-        Text(text = "Collect".uppercase())
-    }
-}
-
-@Composable
-private fun ActivationCodeView(activationCode: ActivationUiState.Active) {
+private fun ActivationCodeView(activationCode: ActivationCode?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .placeholder(activationCode.isProcessing, highlight = PlaceholderHighlight.shimmer()),
+            .placeholder(activationCode == null, highlight = PlaceholderHighlight.shimmer()),
     ) {
         Text(
-            text = activationCode.code,
+            text = activationCode?.value ?: "",
             style = MaterialTheme.typography.headlineLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier

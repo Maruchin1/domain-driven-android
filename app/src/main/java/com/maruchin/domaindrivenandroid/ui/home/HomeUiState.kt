@@ -1,26 +1,18 @@
 package com.maruchin.domaindrivenandroid.ui.home
 
 import androidx.compose.runtime.Immutable
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
+import com.maruchin.domaindrivenandroid.ui.placeholderCollectableCoupon
 
 @Immutable
 data class HomeUiState(
-    val coupons: List<CouponItemUiState> = listOf(
-        CouponItemUiState(),
-        CouponItemUiState(),
-        CouponItemUiState(),
-        CouponItemUiState(),
-        CouponItemUiState(),
-    ),
-    val showError: Boolean = false,
+    val myPoints: Points? = null,
+    val coupons: List<CollectableCoupon> = getPlaceholderCoupons(),
+    val isLoading: Boolean = true,
+    val failedToLoadCoupons: Boolean = false
 )
 
-@Immutable
-data class CouponItemUiState(
-    val id: ID = ID(""),
-    val imageUrl: String = "",
-    val couponName: String = "00000 00000 00000",
-    val price: String = "00000",
-    val isLoading: Boolean = true,
-    val canCollect: Boolean = false,
-)
+private fun getPlaceholderCoupons(): List<CollectableCoupon> {
+    return (1..5).map(::placeholderCollectableCoupon)
+}

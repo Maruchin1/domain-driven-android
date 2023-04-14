@@ -1,22 +1,19 @@
 package com.maruchin.domaindrivenandroid.data.account
 
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AccountRepository @Inject constructor() : Mutex by Mutex() {
-    private var _account: Account? = sampleAccount
+class AccountRepository @Inject constructor() {
+    private val account = MutableStateFlow<Account?>(sampleAccount)
 
-    suspend fun getLoggedInAccount(): Account? = withLock {
-        delay(1_000)
-        _account
+    fun getLoggedInAccount(): Flow<Account?> {
+        return account
     }
 
-    suspend fun saveLoggedInAccount(account: Account?) = withLock {
-        delay(1_000)
-        _account = account
+    suspend fun saveLoggedInAccount(account: Account?) {
+        this.account.emit(account)
     }
 }

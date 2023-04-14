@@ -9,13 +9,13 @@ data class Account(
     val collectedPoints: Points,
 ) {
 
-    fun canPayForCoupon(coupon: Coupon): Boolean {
-        return collectedPoints >= coupon.price
+    fun canPayFor(coupon: Coupon): Boolean {
+        return collectedPoints >= coupon.points
     }
 
-    fun payForCoupon(coupon: Coupon): Account {
-        check(canPayForCoupon(coupon))
-        return copy(collectedPoints = collectedPoints - coupon.price)
+    fun payFor(coupon: Coupon): Account {
+        check(canPayFor(coupon))
+        return copy(collectedPoints = collectedPoints - coupon.points)
     }
 }
 
