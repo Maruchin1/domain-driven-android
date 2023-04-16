@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.maruchin.domaindrivenandroid.data.account.AccountRepository
 import com.maruchin.domaindrivenandroid.domain.coupon.GetAllCollectableCouponsUseCase
+import com.maruchin.domaindrivenandroid.ui.logError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,8 @@ class HomeViewModel @Inject constructor(
         account
     ) { allCoupons, account ->
         HomeUiState(coupons = allCoupons, isLoading = false, myPoints = account.collectedPoints)
-    }.catch {
+    }.catch { error ->
+        logError(error)
         emit(HomeUiState(coupons = emptyList(), isLoading = false, failedToLoadCoupons = true))
     }.stateIn(viewModelScope, SharingStarted.Lazily, HomeUiState())
 }

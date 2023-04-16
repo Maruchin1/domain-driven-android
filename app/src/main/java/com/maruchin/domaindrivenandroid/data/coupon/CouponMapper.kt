@@ -9,6 +9,7 @@ fun CouponJson.toModel() = Coupon(
     name = name,
     points = Points(points),
     image = URL(image),
+    activationCode = null
 )
 
-fun List<CouponJson>.toModel() = this.map { it.toModel() }
+fun List<CouponJson>.toModel() = map { it.toModel() }

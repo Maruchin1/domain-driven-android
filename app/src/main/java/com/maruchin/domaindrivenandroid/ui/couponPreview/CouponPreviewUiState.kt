@@ -1,23 +1,23 @@
 package com.maruchin.domaindrivenandroid.ui.couponPreview
 
-import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
 import com.maruchin.domaindrivenandroid.ui.placeholderCollectableCoupon
 
 data class CouponPreviewUiState(
     val coupon: CollectableCoupon = placeholderCollectableCoupon(),
     val isLoading: Boolean = true,
-    val couponStatus: CouponStatus = CouponStatus.NotCollected,
+    val isCollecting: Boolean = false,
     val failedToLoadCoupon: Boolean = false,
 )
 
-sealed class CouponStatus {
+fun CouponPreviewUiState.getCouponStatus(): CouponStatus {
+    return when {
+        isCollecting -> CouponStatus.COLLECTING
+        coupon.coupon.activationCode != null -> CouponStatus.COLLECTED
+        else -> CouponStatus.NOT_COLLECTED
+    }
+}
 
-    object NotCollected : CouponStatus()
-
-    object CollectingInProgress : CouponStatus()
-
-    object FailedToCollect : CouponStatus()
-
-    data class Collected(val activationCode: ActivationCode) : CouponStatus()
+enum class CouponStatus {
+    NOT_COLLECTED, COLLECTING, COLLECTED
 }

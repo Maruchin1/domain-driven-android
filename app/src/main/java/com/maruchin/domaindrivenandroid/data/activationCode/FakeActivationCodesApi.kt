@@ -6,14 +6,17 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 const val ALLOWED_CHARS = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
+const val TIME_TO_ACTIVATE = 60_000L
 
 class FakeActivationCodesApi @Inject constructor() : ActivationCodesApi {
-    override suspend fun fetchActivationCodeForCoupon(couponId: ID): String {
+
+    override suspend fun fetchActivationCodeForCoupon(couponId: ID): ActivationCodeJson {
         delay(2_000)
-        return buildString(ActivationCode.LENGTH) {
+        val code = buildString(ActivationCode.LENGTH) {
             repeat(ActivationCode.LENGTH) {
                 append(ALLOWED_CHARS[Random.nextInt(ALLOWED_CHARS.length)])
             }
         }
+        return ActivationCodeJson(value = code, timeToActivate = TIME_TO_ACTIVATE)
     }
 }

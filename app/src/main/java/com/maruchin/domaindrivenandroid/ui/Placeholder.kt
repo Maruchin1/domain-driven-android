@@ -12,6 +12,7 @@ fun placeholderCollectableCoupon(index: Int = 0) = CollectableCoupon(
         name = "00000 00000 00000 00000 00000",
         points = Points(1000),
         image = URL("http://empty.placeholder"),
+        activationCode = null,
     ),
     canCollect = true,
 )

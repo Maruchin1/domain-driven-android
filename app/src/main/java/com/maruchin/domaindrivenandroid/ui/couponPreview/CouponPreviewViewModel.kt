@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.maruchin.domaindrivenandroid.data.units.ID
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectCouponUseCase
 import com.maruchin.domaindrivenandroid.domain.coupon.GetCollectableCouponUseCase
+import com.maruchin.domaindrivenandroid.ui.logError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,7 +25,7 @@ class CouponPreviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val couponId = MutableStateFlow<ID?>(null)
-    private val couponStatus = MutableStateFlow<CouponStatus>(CouponStatus.NotCollected)
+    private val isActivating = MutableStateFlow(false)
 
     private val coupon = couponId.filterNotNull().flatMapLatest { couponId ->
         getCollectableCouponUseCase(couponId)
@@ -32,10 +33,11 @@ class CouponPreviewViewModel @Inject constructor(
 
     val uiState: StateFlow<CouponPreviewUiState> = combine(
         coupon,
-        couponStatus,
-    ) { coupon, couponStatus ->
-        CouponPreviewUiState(coupon = coupon, isLoading = false, couponStatus = couponStatus)
-    }.catch {
+        isActivating
+    ) { coupon, isActivating ->
+        CouponPreviewUiState(coupon = coupon, isCollecting = isActivating, isLoading = false)
+    }.catch { error ->
+        logError(error)
         emit(CouponPreviewUiState(failedToLoadCoupon = true))
     }.stateIn(viewModelScope, SharingStarted.Lazily, CouponPreviewUiState())
 
@@ -45,12 +47,11 @@ class CouponPreviewViewModel @Inject constructor(
 
     fun collectCoupon() = viewModelScope.launch {
         try {
-            couponStatus.value = CouponStatus.CollectingInProgress
+            isActivating.value = true
             val couponId = checkNotNull(couponId.value)
-            val activationCode = collectCouponUseCase(couponId)
-            couponStatus.value = CouponStatus.Collected(activationCode)
-        } catch (_: Throwable) {
-            couponStatus.value = CouponStatus.FailedToCollect
+            collectCouponUseCase(couponId)
+        } finally {
+            isActivating.value = false
         }
     }
 }

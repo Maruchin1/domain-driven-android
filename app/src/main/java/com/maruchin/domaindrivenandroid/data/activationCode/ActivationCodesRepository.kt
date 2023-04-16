@@ -10,6 +10,6 @@ class ActivationCodesRepository @Inject constructor(
 ) {
 
     suspend fun getActivationCodeForCoupon(couponId: ID): ActivationCode {
-        return activationCodesApi.fetchActivationCodeForCoupon(couponId).let(::ActivationCode)
+        return activationCodesApi.fetchActivationCodeForCoupon(couponId).toModel()
     }
 }

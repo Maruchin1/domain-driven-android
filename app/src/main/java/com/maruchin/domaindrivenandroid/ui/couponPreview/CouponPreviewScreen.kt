@@ -38,6 +38,7 @@ import com.google.accompanist.placeholder.material.shimmer
 import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 import com.maruchin.domaindrivenandroid.ui.format
+import com.maruchin.domaindrivenandroid.ui.formatSeconds
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
 @Composable
@@ -58,17 +59,15 @@ fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onColle
             CouponNameView(couponName = state.coupon.coupon.name, isLoading = state.isLoading)
             PointsView(price = state.coupon.coupon.points.format(), isLoading = state.isLoading)
             Spacer(modifier = Modifier.weight(1f))
-            AnimatedContent(targetState = state.couponStatus) { couponStatus ->
-                when (couponStatus) {
-                    CouponStatus.NotCollected -> CollectButton(
+            AnimatedContent(targetState = state.getCouponStatus()) { status ->
+                when (status) {
+                    CouponStatus.NOT_COLLECTED -> CollectButton(
                         isLoading = state.isLoading,
                         canCollect = state.coupon.canCollect,
                         onCollect = onCollect,
                     )
-
-                    CouponStatus.CollectingInProgress -> ActivationCodeView(activationCode = null)
-                    CouponStatus.FailedToCollect -> TODO()
-                    is CouponStatus.Collected -> ActivationCodeView(couponStatus.activationCode)
+                    CouponStatus.COLLECTING -> ActivationCodeView(code = null)
+                    CouponStatus.COLLECTED -> ActivationCodeView(code = state.coupon.coupon.activationCode)
                 }
             }
         }
@@ -156,21 +155,29 @@ private fun CollectButton(isLoading: Boolean, canCollect: Boolean, onCollect: ()
 }
 
 @Composable
-private fun ActivationCodeView(activationCode: ActivationCode?) {
+private fun ActivationCodeView(code: ActivationCode?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(12.dp)
-            .placeholder(activationCode == null, highlight = PlaceholderHighlight.shimmer()),
+            .placeholder(code == null, highlight = PlaceholderHighlight.shimmer()),
     ) {
-        Text(
-            text = activationCode?.value ?: "",
-            style = MaterialTheme.typography.headlineLarge,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-        )
+        Column(modifier = Modifier.padding(20.dp)) {
+            Text(
+                text = code?.value ?: "",
+                style = MaterialTheme.typography.headlineLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Text(
+                text = "Pozostało ${code?.remainingTime?.formatSeconds() ?: ""}",
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp)
+            )
+        }
     }
 }
 

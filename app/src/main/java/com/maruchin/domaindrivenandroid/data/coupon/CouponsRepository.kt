@@ -2,12 +2,11 @@ package com.maruchin.domaindrivenandroid.data.coupon
 
 import com.maruchin.domaindrivenandroid.data.units.ID
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,20 +15,33 @@ class CouponsRepository @Inject constructor(
     private val couponsApi: CouponsApi,
     private val scope: CoroutineScope,
 ) {
-
-    private val coupons: SharedFlow<List<Coupon>> = flow {
-        emit(couponsApi.fetchAllCoupons())
-    }.map { json ->
-        json.toModel()
-    }.shareIn(scope, SharingStarted.Lazily, replay = 1)
+    private val coupons = MutableStateFlow<Map<ID, Coupon>>(emptyMap())
 
     fun getAllCoupons(): Flow<List<Coupon>> {
-        return coupons
+        return coupons.map { collection ->
+            collection.values.toList()
+        }.onStart {
+            fetchCouponsIfNotAvailableLocallyAsync().await()
+        }
     }
 
     fun getCoupon(id: ID): Flow<Coupon?> {
-        return coupons.map { coupons ->
-            coupons.find { it.id == id }
+        return coupons.map { collection ->
+            collection[id]
+        }.onStart {
+            fetchCouponsIfNotAvailableLocallyAsync().await()
+        }
+    }
+
+    suspend fun updateCoupon(coupon: Coupon) {
+        val updatedCoupons = coupons.value + (coupon.id to coupon)
+        coupons.emit(updatedCoupons)
+    }
+
+    private fun fetchCouponsIfNotAvailableLocallyAsync() = scope.async {
+        if (coupons.value.isEmpty()) {
+            val couponsFromApi = couponsApi.fetchAllCoupons().toModel().associateBy { it.id }
+            coupons.emit(couponsFromApi)
         }
     }
 }
