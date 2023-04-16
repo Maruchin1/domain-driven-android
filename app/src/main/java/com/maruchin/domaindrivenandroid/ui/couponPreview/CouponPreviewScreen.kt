@@ -36,6 +36,9 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
 import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
+import com.maruchin.domaindrivenandroid.data.activationCode.sampleActivationCode
+import com.maruchin.domaindrivenandroid.data.coupon.sampleCoupons
+import com.maruchin.domaindrivenandroid.domain.coupon.sampleCollectableCoupons
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 import com.maruchin.domaindrivenandroid.ui.format
 import com.maruchin.domaindrivenandroid.ui.formatSeconds
@@ -192,5 +195,24 @@ private fun DefaultPreview(@PreviewParameter(UiStateProvider::class) state: Coup
 private class UiStateProvider : PreviewParameterProvider<CouponPreviewUiState> {
     override val values = sequenceOf(
         CouponPreviewUiState(),
+        CouponPreviewUiState(
+            coupon = sampleCollectableCoupons[0],
+            isLoading = false,
+        ),
+        CouponPreviewUiState(
+            coupon = sampleCollectableCoupons[1],
+            isLoading = false,
+        ),
+        CouponPreviewUiState(
+            coupon = sampleCollectableCoupons[1],
+            isLoading = false,
+            isCollecting = true,
+        ),
+        CouponPreviewUiState(
+            coupon = sampleCollectableCoupons[1].copy(
+                coupon = sampleCollectableCoupons[1].coupon.collect(sampleActivationCode)
+            ),
+            isLoading = false,
+        )
     )
 }

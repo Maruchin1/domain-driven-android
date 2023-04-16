@@ -35,9 +35,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.material.placeholder
+import com.maruchin.domaindrivenandroid.data.account.sampleAccount
 import com.maruchin.domaindrivenandroid.data.units.ID
 import com.maruchin.domaindrivenandroid.data.units.Points
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
+import com.maruchin.domaindrivenandroid.domain.coupon.sampleCollectableCoupons
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 import com.maruchin.domaindrivenandroid.ui.format
 
@@ -160,5 +162,10 @@ private fun DefaultPreview(@PreviewParameter(UiStateProvider::class) state: Home
 private class UiStateProvider : PreviewParameterProvider<HomeUiState> {
     override val values = sequenceOf(
         HomeUiState(),
+        HomeUiState(
+            myPoints = sampleAccount.collectedPoints,
+            coupons = sampleCollectableCoupons,
+            isLoading = false,
+        )
     )
 }
