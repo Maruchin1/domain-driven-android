@@ -23,3 +23,8 @@ data class ActivationCode(val value: String, val remainingTime: Duration) {
         const val LENGTH = 8
     }
 }
+
+val sampleActivationCode = ActivationCode(
+    value = "QW123456",
+    remainingTime = 60.seconds,
+)

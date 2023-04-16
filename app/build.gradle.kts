@@ -71,6 +71,8 @@ dependencies {
     implementation(libs.retrofit.gson)
     kapt(libs.hilt.android.compiler)
     testImplementation(libs.junit)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))

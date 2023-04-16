@@ -28,3 +28,27 @@ data class Coupon(
         activationCode = null,
     )
 }
+
+val sampleCoupons = listOf(
+    Coupon(
+        id = ID("1"),
+        name = "Cheesburger with fries",
+        points = Points(200),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/cheesburger_with_fries_coupon.jpeg"),
+        activationCode = null,
+    ),
+    Coupon(
+        id = ID("2"),
+        name = "2 x Milkshake",
+        points = Points(100),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_milkshakes_coupon.jpeg"),
+        activationCode = null,
+    ),
+    Coupon(
+        id = ID("3"),
+        name = "2 x Soda drink",
+        points = Points(50),
+        image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_soda_drinks_coupon.jpeg"),
+        activationCode = null,
+    )
+)
