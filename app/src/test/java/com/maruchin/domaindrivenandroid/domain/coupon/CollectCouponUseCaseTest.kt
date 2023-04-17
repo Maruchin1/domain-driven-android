@@ -2,6 +2,8 @@ package com.maruchin.domaindrivenandroid.domain.coupon
 
 import app.cash.turbine.test
 import com.maruchin.domaindrivenandroid.data.account.AccountRepository
+import com.maruchin.domaindrivenandroid.data.account.FakeAccountApi
+import com.maruchin.domaindrivenandroid.data.account.FakeAccountStorage
 import com.maruchin.domaindrivenandroid.data.account.sampleAccount
 import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCodesRepository
 import com.maruchin.domaindrivenandroid.data.activationCode.FakeActivationCodesApi
@@ -24,7 +26,9 @@ class CollectCouponUseCaseTest {
     private val scope = TestScope()
     private val couponsApi = FakeCouponsApi()
     private val activationCodesApi = FakeActivationCodesApi()
-    private val accountRepository = AccountRepository()
+    private val accountApi = FakeAccountApi()
+    private val accountStorage = FakeAccountStorage()
+    private val accountRepository = AccountRepository(accountApi, accountStorage)
     private val couponsRepository = CouponsRepository(couponsApi, scope)
     private val activationCodesRepository = ActivationCodesRepository(activationCodesApi)
     private val collectCouponUseCase =

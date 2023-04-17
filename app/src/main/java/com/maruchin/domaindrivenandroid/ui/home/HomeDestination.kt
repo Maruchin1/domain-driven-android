@@ -9,10 +9,15 @@ import com.maruchin.domaindrivenandroid.data.units.ID
 
 const val HOME_ROUTE = "home"
 
-fun NavGraphBuilder.homeScreen(onOpenCoupon: (ID) -> Unit) {
+fun NavGraphBuilder.homeScreen(onOpenCoupon: (ID) -> Unit, onLoggedOut: () -> Unit) {
     composable(HOME_ROUTE) {
         val viewModel = hiltViewModel<HomeViewModel>()
         val state by viewModel.uiState.collectAsState()
-        HomeScreen(state = state, onOpenCoupon = onOpenCoupon)
+        HomeScreen(
+            state = state,
+            onOpenCoupon = onOpenCoupon,
+            onLogout = viewModel::logout,
+            onLoggedOut = onLoggedOut,
+        )
     }
 }

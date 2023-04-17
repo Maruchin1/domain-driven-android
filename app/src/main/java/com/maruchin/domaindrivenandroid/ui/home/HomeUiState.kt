@@ -10,7 +10,8 @@ data class HomeUiState(
     val myPoints: Points? = null,
     val coupons: List<CollectableCoupon> = getPlaceholderCoupons(),
     val isLoading: Boolean = true,
-    val failedToLoadCoupons: Boolean = false
+    val failedToLoadCoupons: Boolean = false,
+    val loggedOut: Boolean = false,
 )
 
 private fun getPlaceholderCoupons(): List<CollectableCoupon> {

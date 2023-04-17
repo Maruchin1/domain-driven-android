@@ -2,6 +2,8 @@ package com.maruchin.domaindrivenandroid.ui.home
 
 import app.cash.turbine.test
 import com.maruchin.domaindrivenandroid.data.account.AccountRepository
+import com.maruchin.domaindrivenandroid.data.account.FakeAccountApi
+import com.maruchin.domaindrivenandroid.data.account.FakeAccountStorage
 import com.maruchin.domaindrivenandroid.data.account.sampleAccount
 import com.maruchin.domaindrivenandroid.data.coupon.CouponsRepository
 import com.maruchin.domaindrivenandroid.data.coupon.FakeCouponsApi
@@ -24,7 +26,9 @@ class HomeViewModelTest {
     private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
     private val couponsApi = FakeCouponsApi()
-    private val accountRepository = AccountRepository()
+    private val accountApi = FakeAccountApi()
+    private val accountStorage = FakeAccountStorage()
+    private val accountRepository = AccountRepository(accountApi, accountStorage)
     private val couponsRepository = CouponsRepository(couponsApi, scope)
     private val getAllCollectableCouponsUseCase =
         GetAllCollectableCouponsUseCase(accountRepository, couponsRepository)

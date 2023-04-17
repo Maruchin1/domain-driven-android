@@ -17,7 +17,9 @@ class GetAllCollectableCouponsUseCase @Inject constructor(
             accountRepository.getLoggedInAccount().filterNotNull(),
             couponsRepository.getAllCoupons()
         ) { account, allCoupons ->
-            allCoupons.map { coupon ->
+            allCoupons.sortedBy {
+                it.points
+            }.map { coupon ->
                 CollectableCoupon(coupon = coupon, canCollect = account.canPayFor(coupon))
             }
         }

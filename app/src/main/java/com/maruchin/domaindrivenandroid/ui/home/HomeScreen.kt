@@ -8,15 +8,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,10 +50,18 @@ import com.maruchin.domaindrivenandroid.ui.format
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(state: HomeUiState, onOpenCoupon: (ID) -> Unit) {
+fun HomeScreen(
+    state: HomeUiState,
+    onOpenCoupon: (ID) -> Unit,
+    onLogout: () -> Unit,
+    onLoggedOut: () -> Unit,
+) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    if (state.loggedOut) {
+        LaunchedEffect(Unit) { onLoggedOut() }
+    }
     Scaffold(
-        topBar = { TopBar(scrollBehavior, state.myPoints) }
+        topBar = { TopBar(scrollBehavior, state.myPoints, onLogout) }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             CouponsListView(
@@ -63,8 +76,8 @@ fun HomeScreen(state: HomeUiState, onOpenCoupon: (ID) -> Unit) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun TopBar(scrollBehavior: TopAppBarScrollBehavior, points: Points?) {
-    CenterAlignedTopAppBar(
+private fun TopBar(scrollBehavior: TopAppBarScrollBehavior, points: Points?, onLogout: () -> Unit) {
+    TopAppBar(
         title = {
             Text(
                 text = buildAnnotatedString {
@@ -81,6 +94,11 @@ private fun TopBar(scrollBehavior: TopAppBarScrollBehavior, points: Points?) {
             )
         },
         scrollBehavior = scrollBehavior,
+        actions = {
+            IconButton(onClick = onLogout) {
+                Icon(imageVector = Icons.Outlined.ExitToApp, contentDescription = "Logout")
+            }
+        }
     )
 }
 
@@ -155,7 +173,7 @@ private fun CouponView(coupon: CollectableCoupon, isLoading: Boolean, onClick: (
 @Composable
 private fun DefaultPreview(@PreviewParameter(UiStateProvider::class) state: HomeUiState) {
     DomainDrivenAndroidTheme {
-        HomeScreen(state = state, onOpenCoupon = {})
+        HomeScreen(state = state, onOpenCoupon = {}, onLogout = {}, onLoggedOut = {})
     }
 }
 

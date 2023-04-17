@@ -1,5 +1,9 @@
 package com.maruchin.domaindrivenandroid.data
 
+import com.maruchin.domaindrivenandroid.data.account.AccountApi
+import com.maruchin.domaindrivenandroid.data.account.AccountStorage
+import com.maruchin.domaindrivenandroid.data.account.DefaultAccountStorage
+import com.maruchin.domaindrivenandroid.data.account.FakeAccountApi
 import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCodesApi
 import com.maruchin.domaindrivenandroid.data.activationCode.FakeActivationCodesApi
 import com.maruchin.domaindrivenandroid.data.coupon.CouponsApi
@@ -18,6 +22,12 @@ abstract class DataModule {
 
     @Binds
     abstract fun activationCodesApi(impl: FakeActivationCodesApi): ActivationCodesApi
+
+    @Binds
+    abstract fun accountApi(impl: FakeAccountApi): AccountApi
+
+    @Binds
+    abstract fun accountStorage(impl: DefaultAccountStorage): AccountStorage
 
 
     companion object {

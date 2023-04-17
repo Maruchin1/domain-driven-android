@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.accompanist.placeholder)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
+    implementation(libs.datastore.preferences)
     kapt(libs.hilt.android.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
