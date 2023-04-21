@@ -1,26 +1,25 @@
 package com.maruchin.domaindrivenandroid.data.account
 
 import com.maruchin.domaindrivenandroid.data.coupon.Coupon
-import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.data.values.Email
+import com.maruchin.domaindrivenandroid.data.values.Points
 
 data class Account(
-    val username: String,
-    val email: String,
+    val email: Email,
     val collectedPoints: Points,
 ) {
 
-    fun canPayFor(coupon: Coupon): Boolean {
+    fun canExchangePointsFor(coupon: Coupon): Boolean {
         return collectedPoints >= coupon.points
     }
 
-    fun payFor(coupon: Coupon): Account {
-        check(canPayFor(coupon))
+    fun exchangePointsFor(coupon: Coupon): Account {
+        check(canExchangePointsFor(coupon))
         return copy(collectedPoints = collectedPoints - coupon.points)
     }
 }
 
 val sampleAccount = Account(
-    username = "Marcin",
-    email = "marcinpk.mp@gmail.com",
-    collectedPoints = Points(100),
+    email = Email("marcinpk.mp@gmail.com"),
+    collectedPoints = Points(170),
 )

@@ -1,6 +1,8 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.coupon.api.CouponsApi
+import com.maruchin.domaindrivenandroid.data.coupon.api.toModel
+import com.maruchin.domaindrivenandroid.data.values.ID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow

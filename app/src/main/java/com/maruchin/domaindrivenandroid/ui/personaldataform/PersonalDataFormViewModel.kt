@@ -2,9 +2,9 @@ package com.maruchin.domaindrivenandroid.ui.personaldataform
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maruchin.domaindrivenandroid.data.registrationrequest.PersonalData
 import com.maruchin.domaindrivenandroid.data.registrationrequest.RegistrationRequestRepository
-import com.maruchin.domaindrivenandroid.domain.registrationrequest.SetRegistrationPersonalDataUseCase
+import com.maruchin.domaindrivenandroid.data.values.Email
+import com.maruchin.domaindrivenandroid.domain.registrationrequest.StartNewRegistrationUseCase
 import com.maruchin.domaindrivenandroid.ui.logError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PersonalDataFormViewModel @Inject constructor(
-    private val setRegistrationPersonalDataUseCase: SetRegistrationPersonalDataUseCase,
     private val registrationRequestRepository: RegistrationRequestRepository,
+    private val startNewRegistrationUseCase: StartNewRegistrationUseCase,
 ) : ViewModel() {
 
     private val request = registrationRequestRepository.getRegistrationRequest()
@@ -29,7 +29,7 @@ class PersonalDataFormViewModel @Inject constructor(
         logError(error)
     }.stateIn(viewModelScope, SharingStarted.Lazily, PersonalDataFormUiState())
 
-    fun proceed(personalData: PersonalData) = viewModelScope.launch {
-        setRegistrationPersonalDataUseCase(personalData)
+    fun proceed(email: Email) = viewModelScope.launch {
+        startNewRegistrationUseCase(email)
     }
 }

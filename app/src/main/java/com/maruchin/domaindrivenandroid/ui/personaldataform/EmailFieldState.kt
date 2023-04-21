@@ -6,11 +6,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.maruchin.domaindrivenandroid.data.values.Email
 
 @Stable
-class EmailFieldState(defaultValue: String?) {
+class EmailFieldState(default: Email?) {
 
-    var value by mutableStateOf<String?>(defaultValue)
+    var value by mutableStateOf<String?>(default?.value)
 
     val error: String?
         get() = value.let {
@@ -23,9 +24,12 @@ class EmailFieldState(defaultValue: String?) {
 
     val isValid: Boolean
         get() = value != null && error == null
+
+    val completeEmail: Email?
+        get() = value?.let(::Email)
 }
 
 @Composable
-fun rememberEmailFieldState(defaultValue: String?) = remember(defaultValue) {
+fun rememberEmailFieldState(defaultValue: Email?) = remember(defaultValue) {
     EmailFieldState(defaultValue)
 }

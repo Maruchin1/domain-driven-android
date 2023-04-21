@@ -1,6 +1,6 @@
 package com.maruchin.domaindrivenandroid.ui
 
-import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.data.values.Points
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 

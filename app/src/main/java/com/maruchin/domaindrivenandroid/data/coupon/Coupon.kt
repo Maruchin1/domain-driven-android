@@ -1,13 +1,13 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
-import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
-import com.maruchin.domaindrivenandroid.data.units.ID
-import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.data.values.ID
+import com.maruchin.domaindrivenandroid.data.values.Name
+import com.maruchin.domaindrivenandroid.data.values.Points
 import java.net.URL
 
 data class Coupon(
     val id: ID,
-    val name: String,
+    val name: Name,
     val points: Points,
     val image: URL,
     val activationCode: ActivationCode?,
@@ -32,21 +32,21 @@ data class Coupon(
 val sampleCoupons = listOf(
     Coupon(
         id = ID("1"),
-        name = "Cheesburger with fries",
+        name = Name("Cheesburger with fries"),
         points = Points(200),
         image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/cheesburger_with_fries_coupon.jpeg"),
         activationCode = null,
     ),
     Coupon(
         id = ID("2"),
-        name = "2 x Milkshake",
+        name = Name("2 x Milkshake"),
         points = Points(100),
         image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_milkshakes_coupon.jpeg"),
         activationCode = null,
     ),
     Coupon(
         id = ID("3"),
-        name = "2 x Soda drink",
+        name = Name("2 x Soda drink"),
         points = Points(50),
         image = URL("https://raw.githubusercontent.com/Maruchin1/domain-driven-android/master/images/two_soda_drinks_coupon.jpeg"),
         activationCode = null,

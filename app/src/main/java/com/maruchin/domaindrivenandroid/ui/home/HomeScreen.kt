@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.material.placeholder
 import com.maruchin.domaindrivenandroid.data.account.sampleAccount
-import com.maruchin.domaindrivenandroid.data.units.ID
-import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.data.values.ID
+import com.maruchin.domaindrivenandroid.data.values.Points
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
 import com.maruchin.domaindrivenandroid.domain.coupon.sampleCollectableCoupons
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
@@ -144,7 +144,7 @@ private fun CouponView(coupon: CollectableCoupon, isLoading: Boolean, onClick: (
                 .placeholder(isLoading),
         )
         Text(
-            text = coupon.coupon.name,
+            text = coupon.coupon.name.value,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,
             onTextLayout = {

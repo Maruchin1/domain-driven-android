@@ -10,7 +10,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.maruchin.domaindrivenandroid.data.registrationrequest.PersonalData
+import com.maruchin.domaindrivenandroid.data.values.Email
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 import com.maruchin.domaindrivenandroid.ui.FieldErrorView
 
@@ -34,20 +33,13 @@ import com.maruchin.domaindrivenandroid.ui.FieldErrorView
 fun PersonalDataFormScreen(
     state: PersonalDataFormUiState,
     onBack: () -> Unit,
-    onProceed: (PersonalData) -> Unit,
+    onProceed: (Email) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val usernameFieldState =
-        rememberUsernameFieldState(state.registrationRequest?.personalData?.username)
-    val emailFieldState = rememberEmailFieldState(state.registrationRequest?.personalData?.email)
+    val emailFieldState = rememberEmailFieldState(state.registrationRequest?.email)
 
     fun proceed() {
-        val username = usernameFieldState.value
-        val email = emailFieldState.value
-        if (username != null && email != null) {
-            val personalData = PersonalData(username = username, email = email)
-            onProceed(personalData)
-        }
+        emailFieldState.completeEmail?.let(onProceed)
     }
 
     Scaffold(
@@ -76,24 +68,6 @@ fun PersonalDataFormScreen(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) {
             TextField(
-                value = usernameFieldState.value ?: "",
-                onValueChange = { usernameFieldState.value = it },
-                singleLine = true,
-                label = {
-                    Text(text = "Username")
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.Person, contentDescription = null)
-                },
-                isError = usernameFieldState.error != null,
-                supportingText = {
-                    FieldErrorView(error = usernameFieldState.error)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 24.dp),
-            )
-            TextField(
                 value = emailFieldState.value ?: "",
                 onValueChange = { emailFieldState.value = it },
                 singleLine = true,
@@ -114,7 +88,7 @@ fun PersonalDataFormScreen(
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = { proceed() },
-                enabled = usernameFieldState.isValid && emailFieldState.isValid,
+                enabled = emailFieldState.isValid,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 12.dp, vertical = 16.dp)

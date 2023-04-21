@@ -1,6 +1,5 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
-import com.maruchin.domaindrivenandroid.data.activationCode.sampleActivationCode
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
@@ -31,7 +30,7 @@ class CouponTest {
     }
 
     @Test
-    fun `Wait until coupon expired`() = runTest {
+    fun `Wait until coupon expires`() = runTest {
         var coupon = sampleCoupons[0]
         val activationCode = sampleActivationCode
 

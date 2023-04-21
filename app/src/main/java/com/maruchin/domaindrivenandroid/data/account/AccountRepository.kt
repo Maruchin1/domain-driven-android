@@ -1,5 +1,9 @@
 package com.maruchin.domaindrivenandroid.data.account
 
+import com.maruchin.domaindrivenandroid.data.account.api.AccountApi
+import com.maruchin.domaindrivenandroid.data.account.api.toModel
+import com.maruchin.domaindrivenandroid.data.account.storage.AccountStorage
+import com.maruchin.domaindrivenandroid.data.values.Email
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +18,7 @@ class AccountRepository @Inject constructor(
         return accountStorage.getLoggedInAccount()
     }
 
-    suspend fun saveLoggedInAccount(account: Account) {
+    suspend fun updateLoggedInAccount(account: Account) {
         accountStorage.saveLoggedInAccount(account)
     }
 
@@ -22,8 +26,8 @@ class AccountRepository @Inject constructor(
         accountStorage.saveLoggedInAccount(null)
     }
 
-    suspend fun createAccount(username: String, email: String) {
-        val accountFromApi = accountApi.createAccount(username, email)
+    suspend fun createAccount(email: Email) {
+        val accountFromApi = accountApi.createAccount(email.value)
         accountStorage.saveLoggedInAccount(accountFromApi.toModel())
     }
 }

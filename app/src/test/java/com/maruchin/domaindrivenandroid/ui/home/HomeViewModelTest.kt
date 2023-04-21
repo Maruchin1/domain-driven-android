@@ -2,11 +2,11 @@ package com.maruchin.domaindrivenandroid.ui.home
 
 import app.cash.turbine.test
 import com.maruchin.domaindrivenandroid.data.account.AccountRepository
-import com.maruchin.domaindrivenandroid.data.account.FakeAccountApi
-import com.maruchin.domaindrivenandroid.data.account.FakeAccountStorage
+import com.maruchin.domaindrivenandroid.data.account.api.FakeAccountApi
+import com.maruchin.domaindrivenandroid.data.account.storage.FakeAccountStorage
 import com.maruchin.domaindrivenandroid.data.account.sampleAccount
 import com.maruchin.domaindrivenandroid.data.coupon.CouponsRepository
-import com.maruchin.domaindrivenandroid.data.coupon.FakeCouponsApi
+import com.maruchin.domaindrivenandroid.data.coupon.api.FakeCouponsApi
 import com.maruchin.domaindrivenandroid.domain.coupon.GetAllCollectableCouponsUseCase
 import com.maruchin.domaindrivenandroid.domain.coupon.sampleCollectableCoupons
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +39,9 @@ class HomeViewModelTest {
     @Before
     fun before() {
         Dispatchers.setMain(dispatcher)
+        runTest {
+            accountRepository.createAccount(sampleAccount.email)
+        }
     }
 
     @After
@@ -47,7 +50,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `Emit coupons`() = scope.runTest {
+    fun `Emit coupons`() = runTest(scope.testScheduler) {
         viewModel.uiState.test {
 
             assertEquals(HomeUiState(), awaitItem())

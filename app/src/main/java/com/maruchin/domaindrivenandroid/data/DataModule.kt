@@ -1,12 +1,12 @@
 package com.maruchin.domaindrivenandroid.data
 
-import com.maruchin.domaindrivenandroid.data.account.AccountApi
-import com.maruchin.domaindrivenandroid.data.account.AccountStorage
-import com.maruchin.domaindrivenandroid.data.account.DefaultAccountStorage
-import com.maruchin.domaindrivenandroid.data.account.FakeAccountApi
-import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCodesApi
-import com.maruchin.domaindrivenandroid.data.activationCode.FakeActivationCodesApi
-import com.maruchin.domaindrivenandroid.data.coupon.CouponsApi
+import com.maruchin.domaindrivenandroid.data.account.api.AccountApi
+import com.maruchin.domaindrivenandroid.data.account.storage.AccountStorage
+import com.maruchin.domaindrivenandroid.data.account.storage.DefaultAccountStorage
+import com.maruchin.domaindrivenandroid.data.account.api.FakeAccountApi
+import com.maruchin.domaindrivenandroid.data.coupon.api.CouponsApi
+import com.maruchin.domaindrivenandroid.data.coupon.factory.ActivationCodeFactory
+import com.maruchin.domaindrivenandroid.data.coupon.factory.DefaultActivationCodeFactory
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -21,13 +21,13 @@ import javax.inject.Singleton
 abstract class DataModule {
 
     @Binds
-    abstract fun activationCodesApi(impl: FakeActivationCodesApi): ActivationCodesApi
-
-    @Binds
     abstract fun accountApi(impl: FakeAccountApi): AccountApi
 
     @Binds
     abstract fun accountStorage(impl: DefaultAccountStorage): AccountStorage
+
+    @Binds
+    abstract fun activationCodeFactory(impl: DefaultActivationCodeFactory): ActivationCodeFactory
 
 
     companion object {

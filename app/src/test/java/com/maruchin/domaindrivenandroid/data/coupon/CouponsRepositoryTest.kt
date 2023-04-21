@@ -1,7 +1,7 @@
 package com.maruchin.domaindrivenandroid.data.coupon
 
 import app.cash.turbine.test
-import com.maruchin.domaindrivenandroid.data.activationCode.sampleActivationCode
+import com.maruchin.domaindrivenandroid.data.coupon.api.FakeCouponsApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest

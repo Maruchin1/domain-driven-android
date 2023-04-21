@@ -2,7 +2,7 @@ package com.maruchin.domaindrivenandroid.domain.coupon
 
 import com.maruchin.domaindrivenandroid.data.account.AccountRepository
 import com.maruchin.domaindrivenandroid.data.coupon.CouponsRepository
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.values.ID
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
@@ -20,7 +20,7 @@ class GetCollectableCouponUseCase @Inject constructor(
         ) { account, coupon ->
             CollectableCoupon(
                 coupon = coupon,
-                canCollect = account.canPayFor(coupon)
+                canCollect = account.canExchangePointsFor(coupon)
             )
         }
     }

@@ -2,7 +2,7 @@ package com.maruchin.domaindrivenandroid.ui.couponPreview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.values.ID
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectCouponUseCase
 import com.maruchin.domaindrivenandroid.domain.coupon.GetCollectableCouponUseCase
 import com.maruchin.domaindrivenandroid.ui.logError
@@ -46,12 +46,10 @@ class CouponPreviewViewModel @Inject constructor(
     }
 
     fun collectCoupon() = viewModelScope.launch {
-        try {
-            isActivating.value = true
-            val couponId = checkNotNull(couponId.value)
+        isActivating.value = true
+        couponId.value?.let { couponId ->
             collectCouponUseCase(couponId)
-        } finally {
-            isActivating.value = false
         }
+        isActivating.value = false
     }
 }

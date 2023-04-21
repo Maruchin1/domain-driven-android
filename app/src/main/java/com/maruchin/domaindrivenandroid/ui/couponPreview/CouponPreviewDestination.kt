@@ -7,7 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.maruchin.domaindrivenandroid.data.units.ID
+import com.maruchin.domaindrivenandroid.data.values.ID
 
 const val COUPON_PREVIEW_ROUTE = "coupon-preview"
 const val COUPON_IN = "couponId"

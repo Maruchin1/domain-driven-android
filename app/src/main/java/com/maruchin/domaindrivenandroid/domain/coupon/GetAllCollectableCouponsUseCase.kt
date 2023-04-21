@@ -20,7 +20,7 @@ class GetAllCollectableCouponsUseCase @Inject constructor(
             allCoupons.sortedBy {
                 it.points
             }.map { coupon ->
-                CollectableCoupon(coupon = coupon, canCollect = account.canPayFor(coupon))
+                CollectableCoupon(coupon = coupon, canCollect = account.canExchangePointsFor(coupon))
             }
         }
     }

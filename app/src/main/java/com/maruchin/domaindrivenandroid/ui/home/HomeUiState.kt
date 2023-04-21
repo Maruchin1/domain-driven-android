@@ -1,7 +1,7 @@
 package com.maruchin.domaindrivenandroid.ui.home
 
 import androidx.compose.runtime.Immutable
-import com.maruchin.domaindrivenandroid.data.units.Points
+import com.maruchin.domaindrivenandroid.data.values.Points
 import com.maruchin.domaindrivenandroid.domain.coupon.CollectableCoupon
 import com.maruchin.domaindrivenandroid.ui.placeholderCollectableCoupon
 

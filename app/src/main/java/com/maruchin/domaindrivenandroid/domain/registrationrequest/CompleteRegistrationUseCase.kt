@@ -13,10 +13,6 @@ class CompleteRegistrationUseCase @Inject constructor(
     suspend operator fun invoke() {
         val request = checkNotNull(registrationRequestRepository.getRegistrationRequest().first())
         check(request.termsAndConditionsAccepted)
-        val personalData = checkNotNull(request.personalData)
-        accountRepository.createAccount(
-            username = personalData.username,
-            email = personalData.email,
-        )
+        accountRepository.createAccount(request.email)
     }
 }

@@ -35,9 +35,9 @@ import coil.compose.AsyncImage
 import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.material.placeholder
 import com.google.accompanist.placeholder.material.shimmer
-import com.maruchin.domaindrivenandroid.data.activationCode.ActivationCode
-import com.maruchin.domaindrivenandroid.data.activationCode.sampleActivationCode
-import com.maruchin.domaindrivenandroid.data.coupon.sampleCoupons
+import com.maruchin.domaindrivenandroid.data.coupon.ActivationCode
+import com.maruchin.domaindrivenandroid.data.values.Name
+import com.maruchin.domaindrivenandroid.data.coupon.sampleActivationCode
 import com.maruchin.domaindrivenandroid.domain.coupon.sampleCollectableCoupons
 import com.maruchin.domaindrivenandroid.ui.DomainDrivenAndroidTheme
 import com.maruchin.domaindrivenandroid.ui.format
@@ -69,6 +69,7 @@ fun CouponPreviewScreen(state: CouponPreviewUiState, onBack: () -> Unit, onColle
                         canCollect = state.coupon.canCollect,
                         onCollect = onCollect,
                     )
+
                     CouponStatus.COLLECTING -> ActivationCodeView(code = null)
                     CouponStatus.COLLECTED -> ActivationCodeView(code = state.coupon.coupon.activationCode)
                 }
@@ -109,9 +110,9 @@ private fun CouponImage(imageUrl: String, isLoading: Boolean) {
 }
 
 @Composable
-private fun CouponNameView(couponName: String, isLoading: Boolean) {
+private fun CouponNameView(couponName: Name, isLoading: Boolean) {
     Text(
-        text = couponName,
+        text = couponName.value,
         style = MaterialTheme.typography.displaySmall,
         modifier = Modifier
             .padding(vertical = 12.dp, horizontal = 20.dp)
@@ -173,7 +174,7 @@ private fun ActivationCodeView(code: ActivationCode?) {
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "Pozostało ${code?.remainingTime?.formatSeconds() ?: ""}",
+                text = code?.remainingTime?.formatSeconds() ?: "",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
