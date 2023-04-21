@@ -18,10 +18,7 @@ class GetCollectableCouponUseCase @Inject constructor(
             accountRepository.getLoggedInAccount().filterNotNull(),
             couponsRepository.getCoupon(couponId).filterNotNull(),
         ) { account, coupon ->
-            CollectableCoupon(
-                coupon = coupon,
-                canCollect = account.canExchangePointsFor(coupon)
-            )
+            CollectableCoupon(coupon, account)
         }
     }
 }
