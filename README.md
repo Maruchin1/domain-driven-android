@@ -29,7 +29,7 @@ Application follows an official [guide to app architecture](https://developer.an
 
 # What does this app do?
 
-It is a loyality application for the fast-food type of restaurant, inspired by the McDonalds app, where user can collect points and exchange them for the coupons.
+It is a loyalty application for the fast-food type of restaurant, inspired by the McDonalds app, where user can collect points and exchange them for the coupons.
 
 ![Projekt bez tytułu (3)](https://user-images.githubusercontent.com/46427781/233632707-fc1953f0-2dbb-4c99-a825-91f8ef43dad8.png)
 
