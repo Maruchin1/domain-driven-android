@@ -6,7 +6,7 @@
 
 During countless discussions regarding the best Android architecture we often forget about principles of an object-oriented programming and proper domain modeling.
 
-This repository contains an example of a Domain Driven Design in the Android application. You can find more details and an in-depth explanation in the Medium article.
+This repository contains an example of a Domain Driven Design in the Android application. You can find more details and an in-depth explanation in the [Medium article](https://medium.com/@maruchin/domain-driven-android-building-a-model-which-makes-sense-badb774c606d).
 
 # Structure of the app
 
